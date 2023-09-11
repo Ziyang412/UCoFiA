@@ -1,2 +1,2 @@
 # UCoFiA
-### Unified Coarse-to-Fine Alignment for Video-Text Retrieval
+### Unified Coarse-to-Fine Alignment for Video-Text Retrieval (ICCV23)
