@@ -92,8 +92,6 @@ cd ./eval_v2t
 sh scripts/eval_msrvtt.sh
 ```
 
-# Future plan
-We will update more scripts for different datasets in the near future. 
 
 # Acknowledgments
 We thank the developers of [X-CLIP](https://github.com/xuguohai/X-CLIP), [TS2-Net](https://github.com/yuqi657/ts2_net), [CLIP4Clip](https://github.com/ArrowLuo/CLIP4Clip), [CLIP](https://github.com/openai/CLIP) for their public code release. We also thank the authors of [NCL](https://arxiv.org/pdf/2212.11790.pdf) for the helpful discussion. 
@@ -101,4 +99,11 @@ We thank the developers of [X-CLIP](https://github.com/xuguohai/X-CLIP), [TS2-Ne
 
 # Reference
 Please cite our paper if you use our models in your works:
-coming soon
+
+```bibtex
+@article{wang2023unified,
+  title={Unified Coarse-to-Fine Alignment for Video-Text Retrieval},
+  author={Wang, Ziyang and Sung, Yi-Lin and Cheng, Feng and Bertasius, Gedas and Bansal, Mohit},
+  journal={arXiv preprint arXiv:2309.10091},
+  year={2023}
+}
