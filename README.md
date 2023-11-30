@@ -22,6 +22,9 @@
 ./eval_t2v
 ```
 
+# Update
+We release the UCOFIA's checkpoint on the MSR-VTT dataset in https://drive.google.com/file/d/1-zynuNEI1u0TwNxw2R163kX4kocWDsIu/view?usp=sharing
+
 # Setup
 
 ## Install Dependencies
