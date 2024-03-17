@@ -58,53 +58,41 @@ class PerturbedTopKFuntion(torch.autograd.Function):
         grad_input = torch.einsum("bkd,bkd->bd", grad_output, expected_gradient)
         return (grad_input,) + tuple([None]*5)
 
-
 class PredictorLG(nn.Module):
     """ Image to Patch Embedding
     """
     def __init__(self, embed_dim=512):
         super().__init__()
         self.in_conv = nn.Sequential(
-            nn.LayerNorm(embed_dim*2),
-            nn.Linear(embed_dim*2, embed_dim, bias=False),
+            nn.LayerNorm(embed_dim),
+            nn.Linear(embed_dim, embed_dim//2, bias=False),
             nn.GELU()
         )
 
-
         self.out_conv = nn.Sequential(
-            nn.Linear(embed_dim*2, embed_dim, bias=False),
+            nn.Linear(embed_dim, embed_dim // 2, bias=False),
             nn.GELU(),
-            nn.Linear(embed_dim, 1, bias=False),
+            # nn.Linear(embed_dim // 2, embed_dim // 4, bias=False),
+            # nn.GELU(),
+            nn.Linear(embed_dim // 2, 1, bias=False),
             nn.Tanh()
-
+            # nn.Sigmoid()
+            # nn.Softmax(dim=-1)
+            # nn.LogSoftmax(dim=-1)
         )
 
 
-    def forward(self, x, max_frames):
+    def forward(self, x):
         '''
         x: shape (bs*n_length, num_tokens, hid_dim)
         '''
-        B, N, C = x.size()
-        local_x = x[:,:, :]
-        global_x = x[:,:1, :]
-        x = torch.cat([local_x, global_x.expand(B, N, C)], dim=-1)
-
         x = self.in_conv(x)
-
         B, N, C = x.size()
         local_x = x[:,:, :]
         global_x = x[:,:1, :]
-        vid_x = global_x.squeeze(1)
-        vid_x = vid_x.reshape(-1, max_frames, C)
-        vid_x = torch.sum(vid_x, dim=1)
-        vid_x = vid_x.unsqueeze(1)
-        vid_x = vid_x.expand(-1,max_frames,-1)
-        vid_x = vid_x.reshape(-1,C)
-        vid_x = vid_x.unsqueeze(1) 
-        x = torch.cat([local_x, vid_x.expand(B, N, C)], dim=-1)
-
+        # print("global_x.shape: ", global_x.shape)
+        x = torch.cat([local_x, global_x.expand(B, N, C)], dim=-1)
         return self.out_conv(x)
-
 
 class VisualTokenSelection(nn.Module):
     def __init__(self, max_frames, embed_dim=512, topk=3):
