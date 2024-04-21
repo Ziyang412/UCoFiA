@@ -112,7 +112,7 @@ class VisualTokenSelection(nn.Module):
         N = L // self.max_frames
         x = x.reshape(B, -1, N, D) # shape here is (bs, max_frames, n_patches, hid_dim)
         x = x.reshape(-1, N, D) # shape here is (bs*max_frames, n_patches, hid_dim)
-        pred_score = self.score_predictor(x, self.max_frames).squeeze() # (bs*max_frames, n_patches)
+        pred_score = self.score_predictor(x).squeeze() # (bs*max_frames, n_patches)
         
         spatial_pred_score = pred_score[:, 1:] # seperate the cls_token (bs*max_frames, n_patches-1)
         topk_indicator = self.topk_selector(spatial_pred_score) # (bs*max_frames, k, n_patches-1))
